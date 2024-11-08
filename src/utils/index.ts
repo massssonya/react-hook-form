@@ -1,0 +1,1 @@
+import {getRandomWord} from './getRandomWord'

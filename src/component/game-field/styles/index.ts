@@ -1,0 +1,1 @@
+export {styleSymbol} from "./style-symbols"
