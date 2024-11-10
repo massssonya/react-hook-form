@@ -1,32 +1,60 @@
-import clsx from 'clsx';
-import { forwardRef } from 'react';
+import clsx from "clsx";
+import {
+	forwardRef,
+	createRef,
+	useEffect,
+	useImperativeHandle,
+	useRef
+} from "react";
+import { gsap } from "gsap";
 
-import { styleSymbol } from './styles';
+import { styleSymbol } from "./styles";
 
 interface InputProps
-    extends React.PropsWithRef<JSX.IntrinsicElements['input']> {
-    placeholder?: string;
-    status: string
+	extends React.PropsWithRef<JSX.IntrinsicElements["input"]> {
+	placeholder?: string;
+	status: string;
 }
 
+const animateStatus = ["onSite", "inWord", "noSymbol"];
 
-export const GameCell = forwardRef<HTMLInputElement, InputProps>((
-    {
-        placeholder,
-        type = "text",
-        status,
-        className,
-        ...rest
-    },
-    ref,
-) => {
-    return (
-        <input
-            type={type}
-            {...rest}
-            ref={ref}
-            className={clsx("w-12 h-12 text-center text-3xl uppercase outline-none focus:border", styleSymbol[status])}
-            maxLength={1}
-        />
-    )
-})
+export const GameCell = forwardRef<HTMLInputElement, InputProps>(
+	({ placeholder, type = "text", status, className, ...rest }, ref) => {
+		const inputRef = createRef<HTMLInputElement>();
+		const hasAnimated = useRef(false);
+
+		useImperativeHandle(ref, () => inputRef.current!);
+
+		useEffect(() => {
+			const input = inputRef.current;
+			if (animateStatus.includes(status) && !hasAnimated.current) {
+				hasAnimated.current = true;
+
+				gsap.to(input, {
+					duration: 1.5,
+					rotateY: 360
+				});
+			}
+
+			return () => {
+				gsap.killTweensOf(input);
+			};
+		}, [status, inputRef]);
+
+		return (
+			<input
+				type={type}
+				data-animate={status == "onSite" ? "true" : "false"}
+				{...rest}
+				ref={inputRef}
+				placeholder={placeholder}
+				className={clsx(
+					"w-12 h-12 text-center text-3xl uppercase outline-none focus:border ",
+					styleSymbol[status],
+					className
+				)}
+				maxLength={1}
+			/>
+		);
+	}
+);

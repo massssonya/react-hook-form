@@ -5,9 +5,9 @@ import { createBrowserRouter, RouterProvider, RouteObject } from 'react-router-d
 import './index.css'
 import App from './App.tsx'
 import { Layout } from './Layout.tsx'
-import { ErrorPage } from './ErrorPage.tsx'
+import { ErrorPage } from './error-page.tsx'
 import { Game } from './pages/game.tsx'
-import { GameProvider } from './api/GameContext.tsx'
+import { GameProvider } from './api/game-context.tsx'
 
 export const routers: RouteObject[] = [
   {

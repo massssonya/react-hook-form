@@ -6,12 +6,12 @@ import clsx from "clsx"
 export const Layout = () => {
     return (
         <div className="relative">
-            <Layout.Nav className="my-5">
-                <Layout.Links 
-                    links={links} 
+            <Layout.Nav className="absolute top-5 right-5">
+                <Layout.Links
+                    links={links}
                     className="after:content-['|'] after:ml-4 after:last:content-[''] after:last:ml-0 "/>
             </Layout.Nav>
-            <div className="py-3 px-2">
+            <div className="flex w-full h-screen justify-center items-center">
                 <Outlet />
             </div>
 
@@ -21,11 +21,11 @@ export const Layout = () => {
 
 Layout.Nav = (
     function LayoutNav(
-        {   children, 
-            className 
-        }: 
-        {   children: ReactNode, 
-            className?: string 
+        {   children,
+            className
+        }:
+        {   children: ReactNode,
+            className?: string
         }) {
         return (
             <nav className={clsx(className)}>
@@ -38,13 +38,13 @@ Layout.Nav = (
 
 Layout.Links = (
     function LayoutLinks(
-        { 
-            links, 
-            className 
-        }: 
-        { 
-            links: RouteObject[], 
-            className?: string 
+        {
+            links,
+            className
+        }:
+        {
+            links: RouteObject[],
+            className?: string
         }) {
         return (
             <>
@@ -58,4 +58,3 @@ Layout.Links = (
             </>
         )
     })
-

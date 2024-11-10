@@ -1,30 +1,19 @@
-import { useEffect } from "react"
 import { GameForm } from "./game-form"
-import { useGame } from "../../api/GameContext";
+import { useGame } from "../../api/game-context";
 import { GameLetters } from "./game-letters";
 
-export const GameField = (
-    {
-        answer,
-        counterAttempts
-    }: {
-        answer: string;
-        counterAttempts: number
-    }) => {
-    const { data, saveGameState, initGameState, sendWord } = useGame()
-
-    useEffect(() => {
-        if (data.answer === "") initGameState(answer, counterAttempts)
-        console.log("render")
-    }, [answer])
+export const GameField = () => {
+    const { data, saveGameState, sendWord } = useGame()
 
     const template = new Array(data.counterRows).fill(null)
-    const SYMBOL_ARRAY = answer.split("")
+    const SYMBOL_ARRAY = data.answer.split("")
 
     return (
-        <div className="w-full flex flex-col items-center">
+        <div className="relative flex flex-col items-center">
+
             {data.isWin && <h3>победа</h3>}
             {data.isLose && <h3>поражение</h3>}
+			{(data.isWin || data.isLose) && <h3>ответ: {data.answer}</h3>}
             <div className=" flex flex-col w-[400px] bg-slate-800">
                 {template.map((_, index) => (
                     <GameForm
