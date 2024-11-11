@@ -1,20 +1,18 @@
-import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, KeyboardEvent } from "react";
 import clsx from "clsx";
 
 import { GameCell } from "./game-cell";
 import { IGameState } from "../../types";
-import { WORDS } from "../../constants";
+import { LANG_REGEX, WORDS } from "../../constants";
 import { UIMessage } from "../ui";
-import { useShowMessage } from "./services";
+import { useGameForm, useShowMessage } from "./services";
 
 const zInput = z
 	.string()
 	.max(1)
 	.min(1)
-	.regex(/^[a-zA-Zа-яА-Я]+$/);
+	.regex(/^[а-яА-Я]+$/);
 
 const schema = z.object({
 	input1: zInput,
@@ -26,24 +24,6 @@ const schema = z.object({
 
 type Schema = z.TypeOf<typeof schema>;
 type KeySchema = keyof Schema;
-
-const initForm = {
-	input1: "",
-	input2: "",
-	input3: "",
-	input4: "",
-	input5: ""
-};
-
-function stringToObj(str: string | undefined): Schema {
-	const result = initForm;
-	if (str) {
-		for (let i = 0; i < str.length; i++) {
-			result[`input${i + 1}` as KeySchema] = str[i];
-		}
-	}
-	return result;
-}
 
 export const GameForm = ({
 	symbols,
@@ -60,18 +40,16 @@ export const GameForm = ({
 	sendWord: (text: string) => void;
 	saveGameState: (state: IGameState) => void;
 }) => {
+	const regex = LANG_REGEX[gameState.language]
+	const {register, handleSubmit, setFocus, setValue, getDefaultValues} = useGameForm(regex)
 	const { show: showError, showMessage: showMessageError } = useShowMessage(5);
 	const { attempts, currentStep } = gameState;
-	const defaultValues = stringToObj(attempts[indexForm]?.word);
-	const { register, handleSubmit, setFocus, setValue } = useForm<Schema>({
-		resolver: zodResolver(schema),
-		mode: "all"
-	});
+	const defaultValues = getDefaultValues(attempts[indexForm]?.word);
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
 		e.preventDefault();
 		const currentCell = `input${index + 1}` as KeySchema;
-		const isLetter = /^[а-яА-Я]$/.test(e.key);
+		const isLetter = regex.test(e.key);
 		let prevCell: KeySchema;
 		let nextCell: KeySchema;
 

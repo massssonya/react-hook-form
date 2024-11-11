@@ -3,16 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { UIButton } from "./component/ui";
 import { useGame } from "./api/game-context";
 import { getRandomWord } from "./utils/get-random-word";
-import { WORDS } from "./constants";
+import { Languages, WORDS } from "./constants";
 
 function App() {
 	const navigate = useNavigate();
-	const { startGameState, data } = useGame();
+	const { startGameState, changeLanguageState, data } = useGame();
 	const { answer } = data;
 	function startGame() {
 		const answer = getRandomWord(WORDS);
 		const counterAttempts = answer.length;
-		startGameState(answer, counterAttempts);
+		startGameState(answer, counterAttempts, Languages.RU);
 		navigate("/game");
 	}
 	return (
@@ -23,6 +23,7 @@ function App() {
 				)}
 
 				<UIButton onClick={startGame}>Новая игра</UIButton>
+				<UIButton onClick={changeLanguageState}>Язык: {data.language}</UIButton>
 			</div>
 		</div>
 	);

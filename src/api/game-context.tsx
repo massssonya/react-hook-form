@@ -1,16 +1,19 @@
 import { createContext, useContext, useState, ReactNode } from "react";
 import { IGameState, TLetters, TStatusSymbol } from "../types";
+import { Languages } from "../constants";
 
 interface IGameContext {
 	data: IGameState;
+	changeLanguageState: () => void;
 	saveGameState: (state: IGameState) => void;
 	initGameState: (answer: string, counterAttempts: number) => void;
-	startGameState: (answer: string, counterAttempts: number) => void;
+	startGameState: (answer: string, counterAttempts: number, lang: Languages) => void;
 	sendWord: (value: string) => void;
 
 }
 
 const initValues: IGameState = {
+	language: Languages.RU,
 	answer: "",
 	attempts: [],
 	counterAttempts: 6,
@@ -44,8 +47,9 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 		}));
 	};
 
-	const startGameState = (answer: string, counterAttempts: number) => {
+	const startGameState = (answer: string, counterAttempts: number, lang: Languages) => {
 		setData(() => ({
+			language: lang,
 			answer: answer,
 			attempts: [],
 			counterAttempts: counterAttempts,
@@ -60,6 +64,13 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 			isLose: false
 		}));
 	};
+
+	const changeLanguageState = () => {
+		setData((prev) => ({
+			...prev,
+			language: prev.language === Languages.RU ? Languages.EN : Languages.RU
+		}))
+	}
 
 	const sendWord = (value: string) => {
 		const isWin = wordIsAnswer(value, data.answer);
@@ -83,7 +94,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
 	return (
 		<GameContext.Provider
-			value={{ data, saveGameState, initGameState, sendWord, startGameState }}
+			value={{ data, saveGameState, initGameState, sendWord, startGameState, changeLanguageState }}
 		>
 			{children}
 		</GameContext.Provider>

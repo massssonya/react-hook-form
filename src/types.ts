@@ -1,3 +1,5 @@
+import { Languages } from "./constants";
+
 export type TPlayer = {
     name: string;
     rating: number;
@@ -25,6 +27,7 @@ export type TLetters = {
 }
 
 export interface IGameState {
+    language: Languages;
     answer: string;
     counterAttempts: number;
     counterRows:  number;
