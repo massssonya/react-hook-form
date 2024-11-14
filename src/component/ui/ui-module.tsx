@@ -1,12 +1,16 @@
 import clsx from "clsx"
 import { ReactNode } from "react";
 
-export const UIModule = ({ title = "Пример заголовка", children, className }: { title?: string; children: ReactNode; className?: string }) => {
+export const UIModule =  ({ title = "Пример заголовка", children, className }: 
+{ 
+    title?: string;
+    children: ReactNode; 
+    className?: string 
+}) => {
     return (
-        <div className={clsx("absolute bg-black/80 px-3 py-2 rounded", className)}>
+        <div className={clsx("bg-black/80 px-3 py-2 rounded", className)}>
             <UIModule.Header title={title} />
-            <UIModule.Body>{children}</UIModule.Body>
-                
+            <UIModule.Body>{children}</UIModule.Body>   
         </div>
     )
 }
@@ -19,7 +23,7 @@ UIModule.Header = function UIModuleHeader({ title = "Заголовок" }: { ti
 
 UIModule.Body = function UIModuleBody({ children }: { children: ReactNode; }) {
     return (
-        <div className="my-2 border w-full justify-center items-center">
+        <div className="my-2 w-full justify-center items-center">
             {children}
         </div>
     )

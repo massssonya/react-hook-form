@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, ReactNode } from "react";
-import { IGameState, TLetters, TStatusSymbol } from "../types";
+import { IGameState, TLetters, TStatusSymbol, TGameStatus } from "../types";
 import { Languages } from "../constants";
 
 interface IGameContext {
@@ -24,8 +24,8 @@ const initValues: IGameState = {
 		onSite: [],
 		noSymbol: []
 	},
-	isWin: false,
-	isLose: false
+	placeholders: Array<string>(5),
+	gameStatus: "active"
 };
 
 const GameContext = createContext<IGameContext>({} as IGameContext);
@@ -60,8 +60,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 				onSite: [],
 				noSymbol: []
 			},
-			isWin: false,
-			isLose: false
+			placeholders: Array<string>(answer.length).fill(""),
+			gameStatus: "active"
 		}));
 	};
 
@@ -73,7 +73,15 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 	}
 
 	const sendWord = (value: string) => {
-		const isWin = wordIsAnswer(value, data.answer);
+		let gameStatus = "active" as TGameStatus;
+		const isWin = wordIsAnswer(value, data.answer)
+		if(isWin){
+			gameStatus = "win"
+		}
+		if(!isWin && data.counterAttempts == 1){
+			gameStatus = "lose"
+		}
+
 		setData((prev) => ({
 			...prev,
 			attempts: [
@@ -84,10 +92,10 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 				}
 			],
 			letters: filterLetters(value, prev.answer, prev.letters),
+			placeholders: getPlaceholderWord(prev.placeholders, value, prev.answer),
 			currentStep: prev.currentStep + 1,
 			counterAttempts: prev.counterAttempts - 1,
-			isWin: isWin,
-			isLose: !isWin && prev.counterAttempts == 1
+			gameStatus: gameStatus
 		}));
 	};
 
@@ -101,6 +109,16 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useGame = () => useContext(GameContext);
+
+function getPlaceholderWord(arr:string[], player_word: string, game_word: string):string[]{
+	let res = arr
+	for(let i = 0; i < player_word.length; i++){
+		if(player_word[i] == game_word[i]){
+			res[i] = player_word[i]
+		}
+	}
+	return res
+}
 
 function symbolInWord(player_word: string, game_word: string): TStatusSymbol[] {
 	const res: TStatusSymbol[] = [];

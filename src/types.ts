@@ -7,13 +7,14 @@ export type TPlayer = {
 }
 
 export type TData = {
-    // countPlayers: number;
     countCells: number;
     time: number;
     players: TPlayer[] | []
 }
 
 export type TStatusSymbol = "default" | "onSite" | "inWord" | "noSymbol"
+
+export type TGameStatus = "win" | "lose" | "active"
 
 type TAttempt = {
     word: string;
@@ -33,8 +34,8 @@ export interface IGameState {
     counterRows:  number;
     attempts: [] | TAttempt[];
     letters: TLetters;
+    placeholders: string[];
     currentStep: number;
-    isWin: boolean;
-    isLose: boolean;
+    gameStatus: TGameStatus
 }
 

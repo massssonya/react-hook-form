@@ -6,7 +6,7 @@ import { startGame } from "../utils";
 export const Home = () => {
 	const navigate = useNavigate();
 	const { startGameState, changeLanguageState, data } = useGame();
-	const { answer, language } = data;
+	const { language, gameStatus, answer } = data;
 	
 	function onStartGame() {
 		startGame(language, startGameState)
@@ -15,7 +15,7 @@ export const Home = () => {
 	return (
 		<div className="flex w-full h-screen justify-center items-center">
 			<div className="px-3 py-5 flex flex-col gap-4">
-				{answer && (
+				{(gameStatus=="active" && answer) && (
 					<UIButton onClick={() => navigate("/game")}>Продолжить игру</UIButton>
 				)}
 

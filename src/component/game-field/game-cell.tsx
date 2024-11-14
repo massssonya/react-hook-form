@@ -11,7 +11,7 @@ import { styleSymbol } from "./styles";
 
 interface InputProps
 	extends React.PropsWithRef<JSX.IntrinsicElements["input"]> {
-	placeholder?: string;
+	placeholder: string;
 	status: string;
 	index: number;
 }
@@ -25,7 +25,6 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 
 		useEffect(() => {
 			const input = inputRef.current;
-			
 			if (animateStatus.includes(status)) {
 				gsap.to(input, {
 					duration: 1.5,
@@ -45,7 +44,7 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 					})
 				}
 			}
-		}, [status]);
+		}, [status, placeholder]);
 
 
 

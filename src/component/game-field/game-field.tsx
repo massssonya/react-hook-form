@@ -10,6 +10,7 @@ export const GameField = () => {
 
     return (
         <div className="relative flex flex-col items-center">
+            {data.answer}
             <div className=" flex flex-col w-[400px] bg-slate-800">
                 {template.map((_, index) => (
                     <GameForm

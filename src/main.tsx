@@ -4,9 +4,8 @@ import { createBrowserRouter, RouterProvider, RouteObject } from 'react-router-d
 
 import './index.css'
 import { Layout } from './Layout.tsx'
-import { ErrorPage } from './error-page.tsx'
 
-import { Game, Home } from './pages'
+import { Game, Home, ErrorPage } from './pages'
 import { GameProvider } from './api/game-context.tsx'
 
 export const routers: RouteObject[] = [

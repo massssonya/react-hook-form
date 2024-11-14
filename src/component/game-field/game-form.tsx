@@ -23,7 +23,7 @@ export const GameForm = ({
 	sendWord: (text: string) => void;
 	saveGameState: (state: IGameState) => void;
 }) => {
-	const { attempts, currentStep, language, answer } = gameState;
+	const { attempts, currentStep, language, answer, placeholders } = gameState;
 	const regex = LANG_REGEX[language]
 
 	const { register, handleSubmit, setFocus, setValue, getDefaultValues, getNameInputForm, reset, schema } = useGameForm(regex)
@@ -33,8 +33,8 @@ export const GameForm = ({
 	type KeySchema = keyof Schema;
 
 	const defaultValues = getDefaultValues(attempts[indexForm]?.word);
-	const styleActiveForm = activeForm && !gameState.isWin ? "bg-slate-400" : "";
-	const disabledCell = !activeForm || gameState.isWin;
+	const styleActiveForm = activeForm && gameState.gameStatus!=="win" ? "bg-slate-400" : "";
+	const disabledCell = !activeForm || gameState.gameStatus=="win";
 
 	useEffect(() => {
 		setFocus("input1");
@@ -122,6 +122,7 @@ export const GameForm = ({
 							!activeForm ? attempts[indexForm]?.status[index] : "default"
 						}
 						index={index+1}
+						placeholder={placeholders[index]}
 					/>
 				))}
 				<input type="submit" className="hidden" />
