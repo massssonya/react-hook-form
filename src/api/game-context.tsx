@@ -52,8 +52,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 			language: lang,
 			answer: answer,
 			attempts: [],
-			counterAttempts: counterAttempts,
-			counterRows: counterAttempts,
+			counterAttempts: counterAttempts+1,
+			counterRows: counterAttempts+1,
 			currentStep: 0,
 			letters: {
 				inWord: [],
@@ -89,7 +89,6 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 			isWin: isWin,
 			isLose: !isWin && prev.counterAttempts == 1
 		}));
-		console.log(data.letters);
 	};
 
 	return (

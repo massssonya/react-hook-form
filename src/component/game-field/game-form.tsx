@@ -1,4 +1,4 @@
-import * as z from "zod";
+import { TypeOf } from "zod";
 import { useEffect, KeyboardEvent } from "react";
 import clsx from "clsx";
 
@@ -7,23 +7,6 @@ import { IGameState } from "../../types";
 import { LANG_REGEX, WORDS } from "../../constants";
 import { UIMessage } from "../ui";
 import { useGameForm, useShowMessage } from "./services";
-
-const zInput = z
-	.string()
-	.max(1)
-	.min(1)
-	.regex(/^[а-яА-Я]+$/);
-
-const schema = z.object({
-	input1: zInput,
-	input2: zInput,
-	input3: zInput,
-	input4: zInput,
-	input5: zInput
-});
-
-type Schema = z.TypeOf<typeof schema>;
-type KeySchema = keyof Schema;
 
 export const GameForm = ({
 	symbols,
@@ -40,15 +23,30 @@ export const GameForm = ({
 	sendWord: (text: string) => void;
 	saveGameState: (state: IGameState) => void;
 }) => {
-	const regex = LANG_REGEX[gameState.language]
-	const {register, handleSubmit, setFocus, setValue, getDefaultValues} = useGameForm(regex)
+	const { attempts, currentStep, language, answer } = gameState;
+	const regex = LANG_REGEX[language]
+
+	const { register, handleSubmit, setFocus, setValue, getDefaultValues, getNameInputForm, reset, schema } = useGameForm(regex)
 	const { show: showError, showMessage: showMessageError } = useShowMessage(5);
-	const { attempts, currentStep } = gameState;
+
+	type Schema = TypeOf<typeof schema>;
+	type KeySchema = keyof Schema;
+
 	const defaultValues = getDefaultValues(attempts[indexForm]?.word);
+	const styleActiveForm = activeForm && !gameState.isWin ? "bg-slate-400" : "";
+	const disabledCell = !activeForm || gameState.isWin;
+
+	useEffect(() => {
+		setFocus("input1");
+	}, [currentStep]);
+
+	useEffect(() => {
+		reset()
+	}, [answer])
 
 	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
 		e.preventDefault();
-		const currentCell = `input${index + 1}` as KeySchema;
+		const currentCell = getNameInputForm(index + 1);
 		const isLetter = regex.test(e.key);
 		let prevCell: KeySchema;
 		let nextCell: KeySchema;
@@ -56,19 +54,27 @@ export const GameForm = ({
 		switch (e.key) {
 			case "Enter":
 				handleSubmit(submit)();
-				return;
+				break;
 			case "Backspace":
-				prevCell = `input${index}` as KeySchema;
+				prevCell = getNameInputForm(index);
 				setValue(currentCell, "");
 				setFocus(prevCell);
-				return;
+				break;
+			case "ArrowRight":
+				nextCell = getNameInputForm(index + 2);
+				setFocus(nextCell ?? currentCell)
+				break;
+			case "ArrowLeft":
+				prevCell = getNameInputForm(index);
+				setFocus(prevCell ?? currentCell);
+				break
 			default:
-				nextCell = `input${index + 2}` as KeySchema;
+				nextCell = getNameInputForm(index + 2);
 				if (isLetter) {
 					setValue(currentCell, e.key);
 				}
 				setFocus(isLetter ? nextCell : currentCell);
-				return;
+				break;
 		}
 	};
 
@@ -82,42 +88,40 @@ export const GameForm = ({
 		sendWord(word);
 	};
 
-	useEffect(() => {
-		setFocus("input1");
-	}, [currentStep]);
-
 	return (
 		<>
 			{showMessageError && (
 				<UIMessage
 					message="Такого слова нет. Попробуйте другое слово"
-					className="absolute -top-12 right-1/2 left-1/2 -translate-x-1/2 w-full bg-red-500/50"
+					msgType="error"
+					className="absolute -top-12 right-1/2 left-1/2 -translate-x-1/2 w-full"
 				/>
 			)}
 			<form
 				onSubmit={handleSubmit(submit)}
 				className={clsx(
 					"flex flex-row justify-evenly py-2",
-					activeForm && !gameState.isWin ? "bg-slate-400" : ""
+					styleActiveForm
 				)}
 			>
 				{symbols.map((_, index) => (
 					<GameCell
 						key={`input${indexForm}_${index + 1}`}
-						{...register(`input${index + 1}` as KeySchema, {
+						{...register(getNameInputForm(index + 1), {
 							value:
 								indexForm < currentStep
-									? defaultValues[`input${index + 1}` as KeySchema]
+									? defaultValues[getNameInputForm(index + 1)]
 									: ""
 						})}
 						type="text"
 						onKeyDown={(e) => handleKeyDown(e, index)}
-						disabled={!activeForm || gameState.isWin}
+						disabled={disabledCell}
 						className="w-12 h-12 text-center text-3xl uppercase"
 						maxLength={1}
 						status={
 							!activeForm ? attempts[indexForm]?.status[index] : "default"
 						}
+						index={index+1}
 					/>
 				))}
 				<input type="submit" className="hidden" />

@@ -10,10 +10,6 @@ export const GameField = () => {
 
     return (
         <div className="relative flex flex-col items-center">
-
-            {data.isWin && <h3>победа</h3>}
-            {data.isLose && <h3>поражение</h3>}
-			{(data.isWin || data.isLose) && <h3>ответ: {data.answer}</h3>}
             <div className=" flex flex-col w-[400px] bg-slate-800">
                 {template.map((_, index) => (
                     <GameForm

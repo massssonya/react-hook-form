@@ -4,6 +4,6 @@ export enum Languages {
 }
 
 export const LANG_REGEX = {
-    [Languages.RU]: /^[а-яА-Я]+$/,
-    [Languages.EN]: /^[a-zA-Z]+$/
+    [Languages.RU]: /^[а-яА-Я]$/,
+    [Languages.EN]: /^[a-zA-Z]$/
 }

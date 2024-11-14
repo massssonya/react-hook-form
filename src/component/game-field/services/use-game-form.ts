@@ -1,16 +1,11 @@
 import { useForm } from "react-hook-form";
-import * as z from "zod";
+import { object, TypeOf, string } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-export const useGameForm = (regex:RegExp) => {
-	const zInput = z
-		.string()
-		.max(1)
-		.min(1)
-		.regex(regex);
-		
+export const useGameForm = (regex: RegExp) => {
+	const zInput = string().max(1).min(1).regex(regex);
 
-	const schema = z.object({
+	const schema = object({
 		input1: zInput,
 		input2: zInput,
 		input3: zInput,
@@ -18,7 +13,7 @@ export const useGameForm = (regex:RegExp) => {
 		input5: zInput
 	});
 
-	type Schema = z.TypeOf<typeof schema>;
+	type Schema = TypeOf<typeof schema>;
 	type KeySchema = keyof Schema;
 
 	const initForm = {
@@ -29,7 +24,7 @@ export const useGameForm = (regex:RegExp) => {
 		input5: ""
 	};
 
-	const { register, handleSubmit, setFocus, setValue } = useForm<Schema>({
+	const { register, handleSubmit, setFocus, setValue, reset } = useForm<Schema>({
 		resolver: zodResolver(schema),
 		mode: "all"
 	});
@@ -44,6 +39,10 @@ export const useGameForm = (regex:RegExp) => {
 		return result;
 	}
 
+	function getNameInputForm(value: number) {
+		return `input${value}` as KeySchema;
+	}
 
-	return { register, handleSubmit, setFocus, setValue, getDefaultValues }
+
+	return { register, handleSubmit, setFocus, setValue, getDefaultValues, getNameInputForm, reset, schema }
 }

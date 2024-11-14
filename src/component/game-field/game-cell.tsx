@@ -3,8 +3,7 @@ import {
 	forwardRef,
 	createRef,
 	useEffect,
-	useImperativeHandle,
-	useRef
+	useImperativeHandle
 } from "react";
 import { gsap } from "gsap";
 
@@ -14,37 +13,45 @@ interface InputProps
 	extends React.PropsWithRef<JSX.IntrinsicElements["input"]> {
 	placeholder?: string;
 	status: string;
+	index: number;
 }
 
 const animateStatus = ["onSite", "inWord", "noSymbol"];
 
 export const GameCell = forwardRef<HTMLInputElement, InputProps>(
-	({ placeholder, type = "text", status, className, ...rest }, ref) => {
+	({ placeholder, type = "text", status, className, index, ...rest }, ref) => {
 		const inputRef = createRef<HTMLInputElement>();
-		const hasAnimated = useRef(false);
-
 		useImperativeHandle(ref, () => inputRef.current!);
 
 		useEffect(() => {
 			const input = inputRef.current;
-			if (animateStatus.includes(status) && !hasAnimated.current) {
-				hasAnimated.current = true;
-
+			
+			if (animateStatus.includes(status)) {
 				gsap.to(input, {
 					duration: 1.5,
-					rotateY: 360
+					rotateY: 360,
+					delay: index * 0.1
 				});
 			}
-
-			return () => {
+			return() => {
 				gsap.killTweensOf(input);
-			};
-		}, [status, inputRef]);
+				if(status==="default"){
+					gsap.set(input, {
+						rotateY: 0,
+					})
+				} else {
+					gsap.set(input, {
+						rotateY: 360,
+					})
+				}
+			}
+		}, [status]);
+
+
 
 		return (
 			<input
 				type={type}
-				data-animate={status == "onSite" ? "true" : "false"}
 				{...rest}
 				ref={inputRef}
 				placeholder={placeholder}

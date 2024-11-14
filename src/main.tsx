@@ -3,16 +3,16 @@ import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider, RouteObject } from 'react-router-dom'
 
 import './index.css'
-import App from './App.tsx'
 import { Layout } from './Layout.tsx'
 import { ErrorPage } from './error-page.tsx'
-import { Game } from './pages/game.tsx'
+
+import { Game, Home } from './pages'
 import { GameProvider } from './api/game-context.tsx'
 
 export const routers: RouteObject[] = [
   {
     path: "/",
-    element: <App />,
+    element: <Home />,
     id: "Home"
   },
   {
