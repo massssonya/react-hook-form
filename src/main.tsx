@@ -7,16 +7,17 @@ import { Layout } from './Layout.tsx'
 
 import { Game, Home, ErrorPage } from './pages'
 import { GameProvider } from './api/game-context.tsx'
+import { AnimateTransitionPage } from './component/animate/animate-transition-page.tsx'
 
 export const routers: RouteObject[] = [
   {
     path: "/",
-    element: <Home />,
-    id: "Home"
+    element: <AnimateTransitionPage direction='right'><Home /></AnimateTransitionPage>,
+    id: "Home",
   },
   {
     path: "/game",
-    element: <Game />,
+    element: <AnimateTransitionPage direction='left'><Game /></AnimateTransitionPage>,
     id: "Game"
   }
 ]
@@ -36,7 +37,7 @@ const router = createBrowserRouter(rootRouter)
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GameProvider>
-      <RouterProvider router={router} />
+        <RouterProvider router={router} />
     </GameProvider>
-  </StrictMode>,
+  </StrictMode>
 )

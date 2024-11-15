@@ -20,13 +20,11 @@ export const Game = () => {
 		}
 	})
 	return (
-		<>
-
+		<div className="relative">
 			<GameField />
 			{gameStatus === "win" && <Confetti recycle={false} numberOfPieces={1000} gravity={0.1} />}
 			{(["win", "lose"].includes(gameStatus)) && (
 				<>
-
 					<GameOverModule
 						answer={data.answer}
 						onClickExit={() => navigate("/")}
@@ -37,7 +35,6 @@ export const Game = () => {
 				</>
 			)
 			}
-
-		</>
+		</div>
 	);
 };

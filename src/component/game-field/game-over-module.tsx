@@ -34,7 +34,7 @@ export const GameOverModule = ({ answer, result, onClickNewGame, onClickExit }:
         })
     }, [result])
     return (
-        <div className="absolute" ref={moduleRef}>
+        <div className="absolute top-1/2 -translate-y-1/2" ref={moduleRef}>
             <UIModule title="Игра завершена" className="w-[400px]" >
                 <UIModule.Text>{resultText[result]}</UIModule.Text>
                 <UIModule.Text>Ответ: {answer}</UIModule.Text>

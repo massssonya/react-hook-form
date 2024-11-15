@@ -14,7 +14,8 @@ export const GameForm = ({
 	activeForm,
 	gameState,
 	sendWord,
-	saveGameState
+	saveGameState,
+	// letterScreenKeyboard
 }: {
 	symbols: string[];
 	indexForm: number;
@@ -22,7 +23,9 @@ export const GameForm = ({
 	gameState: IGameState;
 	sendWord: (text: string) => void;
 	saveGameState: (state: IGameState) => void;
+	// letterScreenKeyboard: string
 }) => {
+	
 	const { attempts, currentStep, language, answer, placeholders } = gameState;
 	const regex = LANG_REGEX[language]
 
@@ -31,7 +34,7 @@ export const GameForm = ({
 
 	type Schema = TypeOf<typeof schema>;
 	type KeySchema = keyof Schema;
-
+	
 	const defaultValues = getDefaultValues(attempts[indexForm]?.word);
 	const styleActiveForm = activeForm && gameState.gameStatus!=="win" ? "bg-slate-400" : "";
 	const disabledCell = !activeForm || gameState.gameStatus=="win";
@@ -44,7 +47,7 @@ export const GameForm = ({
 		reset()
 	}, [answer])
 
-	const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>, index: number) => {
+	const handleKeyDown = (e: KeyboardEvent, index: number) => {
 		e.preventDefault();
 		const currentCell = getNameInputForm(index + 1);
 		const isLetter = regex.test(e.key);

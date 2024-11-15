@@ -74,7 +74,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 
 	const sendWord = (value: string) => {
 		let gameStatus = "active" as TGameStatus;
-		const isWin = wordIsAnswer(value, data.answer)
+		const isWin = computeWin(value, data.answer)
 		if(isWin){
 			gameStatus = "win"
 		}
@@ -88,7 +88,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 				...prev.attempts,
 				{
 					word: value,
-					status: symbolInWord(value, prev.answer)
+					status: computeSymbolInWord(value, prev.answer)
 				}
 			],
 			letters: filterLetters(value, prev.answer, prev.letters),
@@ -120,7 +120,7 @@ function getPlaceholderWord(arr:string[], player_word: string, game_word: string
 	return res
 }
 
-function symbolInWord(player_word: string, game_word: string): TStatusSymbol[] {
+function computeSymbolInWord(player_word: string, game_word: string): TStatusSymbol[] {
 	const res: TStatusSymbol[] = [];
 	for (let i = 0; i < player_word.length; i++) {
 		const currentSymbol = player_word[i];
@@ -133,7 +133,7 @@ function symbolInWord(player_word: string, game_word: string): TStatusSymbol[] {
 	return res;
 }
 
-function wordIsAnswer(word: string, answer: string) {
+function computeWin(word: string, answer: string) {
 	return word === answer;
 }
 
