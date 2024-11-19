@@ -6,17 +6,17 @@ import clsx from "clsx"
 
 export const Layout = () => {
     return (
-            <div className="relative">
+            <div className="absolute top-0 left-0 h-screen w-full">
                 {/* <Layout.Nav className="absolute top-5 right-5">
                     <Layout.Links
                         links={links}
                         className="after:content-['|'] after:ml-4 after:last:content-[''] after:last:ml-0 " />
                 </Layout.Nav> */}
-                <div className="flex w-full h-screen justify-center items-center">
+                
 
                     <Outlet />
 
-                </div>
+                
             </div>
     )
 }

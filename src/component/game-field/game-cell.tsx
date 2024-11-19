@@ -25,6 +25,28 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 
 		useEffect(() => {
 			const input = inputRef.current;
+			gsap.fromTo(input,
+				{
+					opacity: 0,
+					scale: 0,
+					rotateZ: 90
+				},
+				{
+					opacity: 1,
+					scale: 1,
+					rotateZ: 0,
+					delay: index * 0.1,
+					duration: 1,
+					ease: "back"
+				}
+			)
+			return() => {
+				gsap.killTweensOf(input);
+			}
+		}, [])
+
+		useEffect(() => {
+			const input = inputRef.current;
 			if (animateStatus.includes(status)) {
 				gsap.to(input, {
 					duration: 1.5,
@@ -55,7 +77,7 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 				ref={inputRef}
 				placeholder={placeholder}
 				className={clsx(
-					"w-12 h-12 text-center text-3xl uppercase outline-none focus:border ",
+					"w-12 h-12 text-center text-3xl uppercase outline-none focus:border-2",
 					styleSymbol[status],
 					className
 				)}

@@ -1,5 +1,5 @@
 import { TypeOf } from "zod";
-import { useEffect, KeyboardEvent } from "react";
+import { useEffect } from "react";
 import clsx from "clsx";
 
 import { GameCell } from "./game-cell";
@@ -15,7 +15,8 @@ export const GameForm = ({
 	gameState,
 	sendWord,
 	saveGameState,
-	// letterScreenKeyboard
+	letterScreenKeyboard,
+	clickScreenKeyboard
 }: {
 	symbols: string[];
 	indexForm: number;
@@ -23,63 +24,34 @@ export const GameForm = ({
 	gameState: IGameState;
 	sendWord: (text: string) => void;
 	saveGameState: (state: IGameState) => void;
-	// letterScreenKeyboard: string
+	letterScreenKeyboard: string;
+	clickScreenKeyboard: (value:string) => void;
 }) => {
 	
 	const { attempts, currentStep, language, answer, placeholders } = gameState;
 	const regex = LANG_REGEX[language]
 
-	const { register, handleSubmit, setFocus, setValue, getDefaultValues, getNameInputForm, reset, schema } = useGameForm(regex)
+	const { register, handleSubmit, setFocus, getDefaultValues, getNameInputForm, reset, schema, currentInput, setCurrentInput, handleKeyDown, handleScreenKeyboardClick } = useGameForm(regex)
 	const { show: showError, showMessage: showMessageError } = useShowMessage(5);
 
 	type Schema = TypeOf<typeof schema>;
-	type KeySchema = keyof Schema;
 	
 	const defaultValues = getDefaultValues(attempts[indexForm]?.word);
 	const styleActiveForm = activeForm && gameState.gameStatus!=="win" ? "bg-slate-400" : "";
 	const disabledCell = !activeForm || gameState.gameStatus=="win";
 
 	useEffect(() => {
-		setFocus("input1");
+		setFocus(currentInput);
 	}, [currentStep]);
 
 	useEffect(() => {
 		reset()
 	}, [answer])
 
-	const handleKeyDown = (e: KeyboardEvent, index: number) => {
-		e.preventDefault();
-		const currentCell = getNameInputForm(index + 1);
-		const isLetter = regex.test(e.key);
-		let prevCell: KeySchema;
-		let nextCell: KeySchema;
-
-		switch (e.key) {
-			case "Enter":
-				handleSubmit(submit)();
-				break;
-			case "Backspace":
-				prevCell = getNameInputForm(index);
-				setValue(currentCell, "");
-				setFocus(prevCell);
-				break;
-			case "ArrowRight":
-				nextCell = getNameInputForm(index + 2);
-				setFocus(nextCell ?? currentCell)
-				break;
-			case "ArrowLeft":
-				prevCell = getNameInputForm(index);
-				setFocus(prevCell ?? currentCell);
-				break
-			default:
-				nextCell = getNameInputForm(index + 2);
-				if (isLetter) {
-					setValue(currentCell, e.key);
-				}
-				setFocus(isLetter ? nextCell : currentCell);
-				break;
-		}
-	};
+	useEffect(() => {
+		handleScreenKeyboardClick(letterScreenKeyboard, submit)
+		return() => clickScreenKeyboard("")
+	}, [letterScreenKeyboard])
 
 	const submit = (data: Schema) => {
 		const word = Object.values(data).join("");
@@ -117,7 +89,8 @@ export const GameForm = ({
 									: ""
 						})}
 						type="text"
-						onKeyDown={(e) => handleKeyDown(e, index)}
+						onKeyDown={(e) => handleKeyDown(e, index, submit)}
+						onClick={() => setCurrentInput(getNameInputForm(index+1))}
 						disabled={disabledCell}
 						className="w-12 h-12 text-center text-3xl uppercase"
 						maxLength={1}
@@ -126,6 +99,7 @@ export const GameForm = ({
 						}
 						index={index+1}
 						placeholder={placeholders[index]}
+
 					/>
 				))}
 				<input type="submit" className="hidden" />

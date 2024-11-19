@@ -20,9 +20,16 @@ export const Game = () => {
 		}
 	})
 	return (
-		<div className="relative">
+		<div className="relative h-screen flex flex-col items-center justify-center">
+			{data.answer}
 			<GameField />
-			{gameStatus === "win" && <Confetti recycle={false} numberOfPieces={1000} gravity={0.1} />}
+			{gameStatus === "win" && 
+			<Confetti 
+				recycle={false} 
+				numberOfPieces={1000} 
+				gravity={0.1}
+				className="w-full "
+				 />}
 			{(["win", "lose"].includes(gameStatus)) && (
 				<>
 					<GameOverModule

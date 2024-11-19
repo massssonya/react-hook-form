@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react"
+import { ReactNode, useState } from "react"
 import { useLocation } from "react-router-dom"
 import { useTransition, animated } from "react-spring"
 
@@ -13,35 +13,36 @@ export function AnimateTransitionPage(
     const location = useLocation()
 
     const transform = {
-        from: direction === "left" ? "" : "-",
-        leave: direction === "left" ? "-" : "",
+        from: direction === "left" ? "-" : "",
+        leave: direction === "left" ? "" : "-",
     }
     const [previousPage, setPreviousPage] = useState("")
 
-    useEffect(() => {
-        return() => {
-            setPreviousPage(location.pathname)
-        }
-    }, [location])
+    // useEffect(() => {
+    //     return() => {
+    //         setPreviousPage(location.pathname)
+    //     }
+    // }, [location])
 
     const transitions = useTransition(location, {
         from: {
-            transform: `translateX(${transform.from}100px)`,
+            // opacity:0,
         },
         enter: {
-            transform: 'translateX(0px)',
+            // opacity:1,
         },
         leave: {
-            transform: `translateX(${transform.leave}100px)`,
+            // opacity:0,
         },
+        onRest: () => setPreviousPage(location.pathname),
         immediate: previousPage === ""
         
     })
     return transitions((styles) => (
         <animated.div style={styles}>
-            <div >
+            {/* <div className=""> */}
                 {children}
-            </div>
+            {/* </div> */}
         </animated.div>
     ))
 }

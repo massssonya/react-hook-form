@@ -52,10 +52,10 @@ button {
 button:hover {
   border-color: #646cff;
 }
-button:focus,
+/* button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
+} */
 
 /* @media (prefers-color-scheme: light) {
   :root {
@@ -79,6 +79,7 @@ input[type="number"] {
   -moz-appearance: textfield;
 }
 
-input[type="text"]::first-letter{
-  background-color: red;
+input[type="text"]{
+  color: transparent;
+  text-shadow: 0 0 0 rgba(255, 255, 255, 0.87);
 }
