@@ -1,27 +1,34 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Confetti from "react-confetti"
-import { GameField, GameOverModule } from "../component/game-field";
+
+import { GameField, GameNavMenu, GameOverModule } from "../component/game-field";
 import { useGame } from "../api/game-context";
 import { startGame } from "../utils";
 
 export const Game = () => {
 	const navigate = useNavigate()
-	const { data, startGameState } = useGame()
+	const { data, startGameState, openLetter } = useGame()
 	const { language, gameStatus } = data
 
 	function onStartGame() {
 		startGame(language, startGameState)
 	}
 
-	useEffect(() => {
+	useEffect(() => {	
 		if (data.answer === "") {
 			navigate("/")
 		}
-	})
+	}, [])
+
 	return (
-		<div className="relative h-screen flex flex-col items-center justify-center">
-			{data.answer}
+		<>
+		<GameNavMenu 
+			className="w-full h-16 "
+			openLetter={openLetter}/>
+		<div className="h-screen flex flex-col items-center justify-center">
+			
+
 			<GameField />
 			{gameStatus === "win" && 
 			<Confetti 
@@ -31,7 +38,6 @@ export const Game = () => {
 				className="w-full "
 				 />}
 			{(["win", "lose"].includes(gameStatus)) && (
-				<>
 					<GameOverModule
 						answer={data.answer}
 						onClickExit={() => navigate("/")}
@@ -39,9 +45,9 @@ export const Game = () => {
 						result={gameStatus}
 
 					/>
-				</>
 			)
 			}
 		</div>
+		</>
 	);
 };

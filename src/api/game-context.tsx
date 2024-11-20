@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { IGameState, TLetters, TStatusSymbol, TGameStatus } from "../types";
 import { Languages } from "../constants";
 
@@ -9,7 +9,7 @@ interface IGameContext {
 	initGameState: (answer: string, counterAttempts: number) => void;
 	startGameState: (answer: string, counterAttempts: number, lang: Languages) => void;
 	sendWord: (value: string) => void;
-
+	openLetter: () => void
 }
 
 const initValues: IGameState = {
@@ -32,7 +32,8 @@ const GameContext = createContext<IGameContext>({} as IGameContext);
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
 	const [data, setData] = useState<IGameState>(initValues);
-
+	
+	
 	const saveGameState = (state: IGameState) => {
 		setData(() => ({
 			...state
@@ -99,9 +100,20 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 		}));
 	};
 
+	const openLetter = () => {
+		
+		setData({
+			...data,
+			placeholders: openLetterPlaceholder(data.placeholders, data.answer)
+		})
+		
+	}
+
+	
+
 	return (
 		<GameContext.Provider
-			value={{ data, saveGameState, initGameState, sendWord, startGameState, changeLanguageState }}
+			value={{ data, saveGameState, initGameState, sendWord, startGameState, changeLanguageState, openLetter }}
 		>
 			{children}
 		</GameContext.Provider>
@@ -109,6 +121,17 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export const useGame = () => useContext(GameContext);
+
+function openLetterPlaceholder(arr:string[], answer:string){
+	const res = arr
+	for(let i=0; i<res.length; i++){
+		if(res[i] === ""){
+			res[i] = answer[i]
+			break
+		}
+	}
+	return res
+}
 
 function getPlaceholderWord(arr:string[], player_word: string, game_word: string):string[]{
 	let res = arr

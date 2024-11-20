@@ -98,7 +98,7 @@ export const GameForm = ({
 							!activeForm ? attempts[indexForm]?.status[index] : "default"
 						}
 						index={index+1}
-						placeholder={placeholders[index]}
+						placeholder={ activeForm ? placeholders[index] : ""}
 
 					/>
 				))}

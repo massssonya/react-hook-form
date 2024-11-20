@@ -77,7 +77,7 @@ const Letter = ({
     }
     const isEnter = letter === "Enter"
     return (
-        <div className={clsx("rounded", className, styleSymbol[status], isEnter && "bg-emerald-400 w-[50px]")} >
+        <div className={clsx("rounded", className, styleSymbol[status], isEnter && "bg-emerald-500 w-[50px]")} >
             <button
                 className={clsx("uppercase text-3xl bg-transparent border-none w-full focus:border-none focus-visible:border-none")}
                 onClick={e => handleClick(e)}

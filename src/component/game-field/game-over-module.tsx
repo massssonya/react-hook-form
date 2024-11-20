@@ -26,10 +26,14 @@ export const GameOverModule = ({ answer, result, onClickNewGame, onClickExit }:
         const module = moduleRef.current
         gsap.fromTo(module, {
             y: 200,
-            delay: 1.5
+            scale: 0.5,
+            rotateX: -90,
+            delay: 2
         }, {
             y: 0,
-            duration: 1.5,
+            rotateX: 0,
+            scale: 1,
+            duration: 2.5,
             ease: "back"
         })
     }, [result])

@@ -6,7 +6,7 @@ import clsx from "clsx"
 
 export const Layout = () => {
     return (
-            <div className="absolute top-0 left-0 h-screen w-full">
+            <div className="h-screen w-full">
                 {/* <Layout.Nav className="absolute top-5 right-5">
                     <Layout.Links
                         links={links}
