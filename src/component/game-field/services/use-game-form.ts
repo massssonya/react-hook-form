@@ -36,7 +36,7 @@ export const useGameForm = (regex: RegExp) => {
 		input5: ""
 	};
 
-	const { register, handleSubmit, setFocus, setValue, reset } = useForm<Schema>({
+	const { register, handleSubmit, setFocus, setValue, reset  } = useForm<Schema>({
 		resolver: zodResolver(schema),
 		mode: "all"
 	});
@@ -62,7 +62,7 @@ export const useGameForm = (regex: RegExp) => {
 		switch (value) {
 			case "Enter":
 				handleSubmit(submit)();
-				setCurrentInput("input1")
+				// setCurrentInput("input1")
 				break;
 			default:
 				const nextCell = getNameInputForm(index);
@@ -84,7 +84,7 @@ export const useGameForm = (regex: RegExp) => {
 		switch (e.key) {
 			case "Enter":
 				handleSubmit(submit)();
-				setCurrentInput("input1")
+				// setCurrentInput("input1")
 				break;
 			case "Backspace":
 				prevCell = getNameInputForm(index);

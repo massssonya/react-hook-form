@@ -2,9 +2,13 @@ import { useState } from "react";
 import { GameForm } from "./game-form"
 import { useGame } from "../../api/game-context";
 import { GameLetters } from "./game-letters";
+import { useAnimate } from "./services";
+import clsx from "clsx";
 
 export const GameField = () => {
     const { data, saveGameState, sendWord } = useGame()
+    const {gameDisplayAnimate} = useAnimate()
+
     const [letterScreenKeyboard, setLetterScreenKeyboard] = useState("")
 
     const template = new Array(data.counterRows).fill(null)
@@ -15,8 +19,8 @@ export const GameField = () => {
     }
 
     return (
-        <div className="relative flex flex-col items-center">
-            <div className=" flex flex-col w-[400px] bg-slate-800">
+        <div className={clsx("relative flex flex-col items-center", gameDisplayAnimate)}>
+            <div className="flex flex-col w-[400px] bg-slate-800">
                 {template.map((_, index) => (
                     <GameForm
                         key={`form_${index}`}

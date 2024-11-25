@@ -1,1 +1,0 @@
-export { AnimateTransitionPage } from "./animate-transition-page"

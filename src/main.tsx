@@ -7,17 +7,16 @@ import { Layout } from './Layout.tsx'
 
 import { Game, Home, ErrorPage } from './pages'
 import { GameProvider } from './api/game-context.tsx'
-import { AnimateTransitionPage } from './component/animate/animate-transition-page.tsx'
 
 export const routers: RouteObject[] = [
   {
     path: "/",
-    element: <AnimateTransitionPage direction='right'><Home /></AnimateTransitionPage>,
+    element: <Home />,
     id: "Home",
   },
   {
     path: "/game",
-    element: <AnimateTransitionPage direction='left'><Game /></AnimateTransitionPage>,
+    element: <Game />,
     id: "Game"
   }
 ]

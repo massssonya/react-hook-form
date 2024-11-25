@@ -6,7 +6,7 @@ import { GameCell } from "./game-cell";
 import { IGameState } from "../../types";
 import { LANG_REGEX, WORDS } from "../../constants";
 import { UIMessage } from "../ui";
-import { useGameForm, useShowMessage } from "./services";
+import { useAnimate, useGameForm, useShowMessage } from "./services";
 
 export const GameForm = ({
 	symbols,
@@ -35,9 +35,11 @@ export const GameForm = ({
 	const { show: showError, showMessage: showMessageError } = useShowMessage(5);
 
 	type Schema = TypeOf<typeof schema>;
+
+	const {activeFormAnimate} = useAnimate(currentStep)
 	
 	const defaultValues = getDefaultValues(attempts[indexForm]?.word);
-	const styleActiveForm = activeForm && gameState.gameStatus!=="win" ? "bg-slate-400" : "";
+	// const styleActiveForm = activeForm && gameState.gameStatus!=="win" ? activeFormAnimate : "";
 	const disabledCell = !activeForm || gameState.gameStatus=="win";
 
 	useEffect(() => {
@@ -75,8 +77,9 @@ export const GameForm = ({
 			<form
 				onSubmit={handleSubmit(submit)}
 				className={clsx(
-					"flex flex-row justify-evenly py-2",
-					styleActiveForm
+					"z-10 flex flex-row justify-evenly py-2",
+					// styleActiveForm,
+				
 				)}
 			>
 				{symbols.map((_, index) => (
@@ -104,6 +107,7 @@ export const GameForm = ({
 				))}
 				<input type="submit" className="hidden" />
 			</form>
+			{activeForm && (<div className={clsx("absolute bg-slate-400 w-full h-16 py-2 z-0", activeFormAnimate)}/>)}
 		</>
 	);
 };

@@ -1,18 +1,29 @@
 import clsx from "clsx";
-import { ReactNode } from "react";
+import { PropsWithRef, ReactNode, createRef, forwardRef, useImperativeHandle } from "react";
 
-export const UIButton = ({
-	children,
-	className,
-	onClick
-}: {
+interface ButtonProps
+	extends PropsWithRef<JSX.IntrinsicElements["button"]> {
 	children: ReactNode;
 	className?: string;
 	onClick?: () => void;
-}) => {
+}
+
+export const UIButton = forwardRef<HTMLButtonElement, ButtonProps>(({
+	children,
+	className,
+	onClick,
+	...rest
+}, ref) => {
+	const btnRef = createRef<HTMLButtonElement>();
+	useImperativeHandle(ref, () => btnRef.current!);
+
 	return (
-		<button className={clsx("py-2 px-4 border", className)} onClick={onClick}>
+		<button
+			ref={btnRef}
+			className={clsx("py-2 px-4 border", className)}
+			onClick={onClick}
+			{...rest}>
 			{children}
 		</button>
 	);
-};
+});

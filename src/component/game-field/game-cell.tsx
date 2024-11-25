@@ -3,14 +3,16 @@ import {
 	forwardRef,
 	createRef,
 	useEffect,
-	useImperativeHandle
+	useImperativeHandle,
+	PropsWithRef
 } from "react";
 import { gsap } from "gsap";
 
 import { styleSymbol } from "./styles";
+import { useAnimate } from "./services";
 
 interface InputProps
-	extends React.PropsWithRef<JSX.IntrinsicElements["input"]> {
+	extends PropsWithRef<JSX.IntrinsicElements["input"]> {
 	placeholder: string;
 	status: string;
 	index: number;
@@ -22,28 +24,7 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 	({ placeholder, type = "text", status, className, index, ...rest }, ref) => {
 		const inputRef = createRef<HTMLInputElement>();
 		useImperativeHandle(ref, () => inputRef.current!);
-
-		useEffect(() => {
-			const input = inputRef.current;
-			gsap.fromTo(input,
-				{
-					opacity: 0,
-					scale: 0,
-					rotateZ: 90
-				},
-				{
-					opacity: 1,
-					scale: 1,
-					rotateZ: 0,
-					delay: index * 0.1,
-					duration: 1,
-					ease: "back"
-				}
-			)
-			return() => {
-				gsap.killTweensOf(input);
-			}
-		}, [])
+		const { inputAnimate } = useAnimate()
 
 		useEffect(() => {
 			const input = inputRef.current;
@@ -54,9 +35,9 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 					delay: index * 0.1
 				});
 			}
-			return() => {
+			return () => {
 				gsap.killTweensOf(input);
-				if(status==="default"){
+				if (status === "default") {
 					gsap.set(input, {
 						rotateY: 0,
 					})
@@ -68,8 +49,6 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 			}
 		}, [status, placeholder]);
 
-
-
 		return (
 			<input
 				type={type}
@@ -79,6 +58,7 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 				className={clsx(
 					"w-12 h-12 text-center text-3xl uppercase outline-none focus:border-2",
 					styleSymbol[status],
+					inputAnimate,
 					className
 				)}
 				maxLength={1}

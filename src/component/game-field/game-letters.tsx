@@ -4,6 +4,7 @@ import { LETTERS, Languages } from "../../constants"
 import { TLetters } from "../../types";
 import { styleSymbol } from "./styles";
 import { MouseEvent } from "react";
+import { useAnimate } from "./services";
 
 export const GameLetters = ({
     statusLetter,
@@ -15,6 +16,8 @@ export const GameLetters = ({
         clickScreenKeyboard: (value: string) => void;
         language: Languages
     }) => {
+
+    const {keyboardRef, letterAnimate} = useAnimate()
 
     function getLetterStatus(letter: string) {
         if (statusLetter.onSite.includes(letter)) {
@@ -30,17 +33,18 @@ export const GameLetters = ({
     }
 
     const LetterButton = (letter: string, index: number) => (
-        <Letter
-            key={`letter_${index}`}
-            letter={letter}
-            className="py-1 px-1"
-            status={getLetterStatus(letter)}
-            onClick={clickScreenKeyboard}
-        />
+        <div className={letterAnimate} key={`letter_${index}`}>
+            <Letter
+                letter={letter}
+                className="py-1 px-1"
+                status={getLetterStatus(letter)}
+                onClick={clickScreenKeyboard}
+            />
+        </div>
     )
 
     return (
-        <div className="mt-4 flex flex-col items-center">
+        <div className="mt-4 flex flex-col items-center" ref={keyboardRef}>
             <div className="flex gap-1">
                 {LETTERS[language].slice(0, 12).map((letter, index) => (
                     LetterButton(letter, index)
@@ -77,12 +81,12 @@ const Letter = ({
     }
     const isEnter = letter === "Enter"
     return (
-        <div className={clsx("rounded", className, styleSymbol[status], isEnter && "bg-emerald-500 w-[50px]")} >
+        <div className={clsx("rounded", className, styleSymbol[status], isEnter && "bg-emerald-500 w-[50px]")}>
             <button
                 className={clsx("uppercase text-3xl bg-transparent border-none w-full focus:border-none focus-visible:border-none")}
                 onClick={e => handleClick(e)}
                 value={letter}
-            >{isEnter ? <FaArrowRight className="pt-1 w-full"/> : letter}</button>
+            >{isEnter ? <FaArrowRight className="pt-1 w-full" /> : letter}</button>
         </div >
     )
 }
