@@ -1,5 +1,4 @@
 import { Link, Outlet, RouteObject } from "react-router-dom"
-// import { routers as links } from "./main"
 import { ReactNode } from "react"
 import clsx from "clsx"
 

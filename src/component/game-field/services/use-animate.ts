@@ -1,5 +1,5 @@
 import gsap from "gsap"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef } from "react"
 import { addPointClassName, isAnimate } from "../../../utils"
 
 export const useAnimate = (currentStep:number) => {
@@ -19,7 +19,6 @@ export const useAnimate = (currentStep:number) => {
         const arrClasses = [gameDisplay, input, letter, navMenu].map(element => isAnimate(element) ? true : false);
         if(!arrClasses.includes(false)){
 
-        
         tl
             .fromTo(gameDisplay, {
                 opacity: 0,

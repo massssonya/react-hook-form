@@ -11,13 +11,14 @@ export const Home = () => {
 		btnNewGameAnimate,
 		btnChangeLanguageAnimate,
 		btnContinueAnimate,
-		headerRef
+		headerTextAnimate,
+		headerAnimate
 	} = useAnimate()
 	const navigate = useNavigate();
 	const { startGameState, changeLanguageState, data } = useGame();
 	const { language, gameStatus, answer } = data;
 
-
+	const headerText = headerAnimate("Wordle").map(span => span)
 
 	function onStartGame() {
 		startGame(language, startGameState)
@@ -25,7 +26,7 @@ export const Home = () => {
 	}
 	return (
 		<div className="flex w-full h-screen justify-center items-center">
-			<h1 ref={headerRef} className="absolute text-9xl">Wordle</h1>
+			<div className={clsx("absolute flex flex-row", headerTextAnimate)}>{headerText}</div>
 			<div className={clsx("px-3 py-5 flex flex-col gap-4 z-10 ")}>
 				{(gameStatus == "active" && answer) && (
 					<UIButton
