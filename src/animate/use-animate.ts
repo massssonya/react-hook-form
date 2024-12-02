@@ -61,7 +61,8 @@ export const useAnimate = () => {
         return () => {
             tl.kill()
             gsap.killTweensOf(btnGroup)
-            gsap.killTweensOf([btnContinue, btnChangeLanguage, btnNewGame])
+            gsap.killTweensOf([btnContinue, btnChangeLanguage, btnNewGame,headerLettersText,headerText])
+
         }
     }, [])
 

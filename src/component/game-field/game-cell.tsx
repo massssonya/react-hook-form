@@ -22,10 +22,10 @@ const animateStatus = ["onSite", "inWord", "noSymbol"];
 
 export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 	({ placeholder, type = "text", status, className, index, ...rest }, ref) => {
+		
 		const inputRef = createRef<HTMLInputElement>();
 		useImperativeHandle(ref, () => inputRef.current!);
 		const { inputAnimate } = useAnimate()
-
 		useEffect(() => {
 			const input = inputRef.current;
 			if (animateStatus.includes(status)) {
@@ -53,7 +53,7 @@ export const GameCell = forwardRef<HTMLInputElement, InputProps>(
 			<input
 				type={type}
 				{...rest}
-				ref={inputRef}
+				ref={ref}
 				placeholder={placeholder}
 				className={clsx(
 					"w-12 h-12 text-center text-3xl uppercase outline-none focus:border-2",

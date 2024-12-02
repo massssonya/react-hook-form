@@ -36,10 +36,9 @@ export const GameForm = ({
 
 	type Schema = TypeOf<typeof schema>;
 
-	const {activeFormAnimate} = useAnimate(currentStep)
+	const {activeFormAnimate} = useAnimate()
 	
 	const defaultValues = getDefaultValues(attempts[indexForm]?.word);
-	// const styleActiveForm = activeForm && gameState.gameStatus!=="win" ? activeFormAnimate : "";
 	const disabledCell = !activeForm || gameState.gameStatus=="win";
 
 	useEffect(() => {
@@ -76,11 +75,7 @@ export const GameForm = ({
 			)}
 			<form
 				onSubmit={handleSubmit(submit)}
-				className={clsx(
-					"z-10 flex flex-row justify-evenly py-2",
-					// styleActiveForm,
-				
-				)}
+				className={clsx("z-10 flex flex-row justify-evenly py-2")}
 			>
 				{symbols.map((_, index) => (
 					<GameCell

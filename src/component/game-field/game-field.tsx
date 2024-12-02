@@ -7,7 +7,7 @@ import clsx from "clsx";
 
 export const GameField = () => {
     const { data, saveGameState, sendWord } = useGame()
-    const {gameDisplayAnimate} = useAnimate()
+    const handleAnimate = useAnimate()
 
     const [letterScreenKeyboard, setLetterScreenKeyboard] = useState("")
 
@@ -19,7 +19,7 @@ export const GameField = () => {
     }
 
     return (
-        <div className={clsx("relative flex flex-col items-center", gameDisplayAnimate)}>
+        <div className={clsx("relative flex flex-col items-center", handleAnimate.gameDisplayAnimate)}>
             <div className="flex flex-col w-[400px] bg-slate-800">
                 {template.map((_, index) => (
                     <GameForm
@@ -40,6 +40,7 @@ export const GameField = () => {
                 statusLetter={data.letters}
                 clickScreenKeyboard={clickScreenKeyboard}
                 language={data.language}
+                animate={[handleAnimate.keyboardRef, handleAnimate.letterAnimate]}
             />
         </div>
     )

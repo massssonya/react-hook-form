@@ -20,7 +20,7 @@ export const UIButton = forwardRef<HTMLButtonElement, ButtonProps>(({
 	return (
 		<button
 			ref={btnRef}
-			className={clsx("py-2 px-4 border", className)}
+			className={clsx("py-2 px-4 border bg-black rounded-md transition-all duration-300 hover:border-violet-800", className)}
 			onClick={onClick}
 			{...rest}>
 			{children}

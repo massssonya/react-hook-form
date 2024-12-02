@@ -28,7 +28,7 @@ export default {
         left: {
           '0%': { transform: 'translateX(10px)', opacity: '0'},
           '100%': { transform: 'translateX(0px)', opacity: '100%'}
-        },
+        }
       },
       animation: {
         up: 'up .5s linear',

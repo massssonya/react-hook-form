@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider, RouteObject } from 'react-router-d
 import './index.css'
 import { Layout } from './Layout.tsx'
 
-import { Game, Home, ErrorPage } from './pages'
+import { ErrorPage, Home, Game } from './pages'
 import { GameProvider } from './api/game-context.tsx'
 
 export const routers: RouteObject[] = [
@@ -17,7 +17,7 @@ export const routers: RouteObject[] = [
   {
     path: "/game",
     element: <Game />,
-    id: "Game"
+    id: "Game",
   }
 ]
 
@@ -27,7 +27,7 @@ const rootRouter: RouteObject[] = [
     element: <Layout />,
     id: "root",
     children: routers,
-    errorElement: <ErrorPage />
+    errorElement: <ErrorPage />,
   }
 ]
 
@@ -36,7 +36,7 @@ const router = createBrowserRouter(rootRouter)
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <GameProvider>
-        <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </GameProvider>
   </StrictMode>
 )

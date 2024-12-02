@@ -1,23 +1,27 @@
 import clsx from "clsx";
 import { FaArrowRight } from "react-icons/fa"
+import { MouseEvent, RefObject, useRef} from "react";
+
 import { LETTERS, Languages } from "../../constants"
 import { TLetters } from "../../types";
 import { styleSymbol } from "./styles";
-import { MouseEvent } from "react";
-import { useAnimate } from "./services";
+import gsap from "gsap";
+
 
 export const GameLetters = ({
     statusLetter,
     clickScreenKeyboard,
-    language
+    language,
+    animate
 }:
     {
         statusLetter: TLetters;
         clickScreenKeyboard: (value: string) => void;
-        language: Languages
+        language: Languages;
+        animate: Array<string | RefObject<HTMLDivElement>>;
     }) => {
-
-    const {keyboardRef, letterAnimate} = useAnimate()
+    
+    const [keyboardRef, letterAnimate] = animate
 
     function getLetterStatus(letter: string) {
         if (statusLetter.onSite.includes(letter)) {
@@ -33,7 +37,7 @@ export const GameLetters = ({
     }
 
     const LetterButton = (letter: string, index: number) => (
-        <div className={letterAnimate} key={`letter_${index}`}>
+        <div className={letterAnimate as string} key={`letter_${index}`}>
             <Letter
                 letter={letter}
                 className="py-1 px-1"
@@ -75,17 +79,33 @@ const Letter = ({
     status: string;
     onClick: (value: string) => void
 }) => {
+    const letterRef = useRef(null)
     const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
         onClick(e.currentTarget.value)
         return
     }
     const isEnter = letter === "Enter"
+    function animateMouseDown(){
+        const letter = letterRef.current
+        gsap.to(letter, {
+            scale: .8,
+            ease: "power1.inOut"
+        })
+    }
+    function animateMouseUp(){
+        const letter = letterRef.current
+        gsap.to(letter, {
+            scale: 1,
+        })
+    }
     return (
-        <div className={clsx("rounded", className, styleSymbol[status], isEnter && "bg-emerald-500 w-[50px]")}>
+        <div ref={letterRef} className={clsx("rounded", className, styleSymbol[status], isEnter ? "bg-emerald-600 w-[50px]" : "")}>
             <button
                 className={clsx("uppercase text-3xl bg-transparent border-none w-full focus:border-none focus-visible:border-none")}
                 onClick={e => handleClick(e)}
                 value={letter}
+                onMouseDown={animateMouseDown}
+                onMouseUp={animateMouseUp}
             >{isEnter ? <FaArrowRight className="pt-1 w-full" /> : letter}</button>
         </div >
     )
